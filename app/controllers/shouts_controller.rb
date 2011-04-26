@@ -1,5 +1,7 @@
 class ShoutsController < ApplicationController
   
+  before_filter :authorize
+  
   def index 
     @shouts = Shout.top5 
     @shout = Shout.new
@@ -11,7 +13,12 @@ class ShoutsController < ApplicationController
   end
 
   def create
+    
+ #   if current_user.shouts.create(params[:shout])
+    
     @shout = Shout.new(params[:shout])
+    @shout.user = current_user
+    
     if @shout.save 
       flash[:success] = "Shout Created"
     else 
